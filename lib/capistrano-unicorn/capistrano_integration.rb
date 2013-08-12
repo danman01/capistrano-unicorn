@@ -167,11 +167,14 @@ module CapistranoUnicorn
             run <<-END
               #{duplicate_unicorn}
 
-              sleep #{unicorn_restart_sleep_time}; # in order to wait for the (old) pidfile to show up
+              #sleep #{unicorn_restart_sleep_time}; # in order to wait for the (old) pidfile to show up
 
-              if #{old_unicorn_is_running?}; then
-                #{unicorn_send_signal('QUIT', get_old_unicorn_pid)};
-              fi;
+              #if #{old_unicorn_is_running?}; then
+                # from github: The first worker forked notices there is still an old master and sends it a QUIT signal.
+                #run("for i in {0..500}; do echo \"Waiting for new workers to start\"; if [[ \"\" != \"$\(netstat -an |grep 8080\)\" ]]; then break; fi; sleep 30; done")
+                # Umm...isn't this done in the unicorn.rb before_fork block? https://github.com/blog/517-unicorn
+                ##{unicorn_send_signal('QUIT', get_old_unicorn_pid)};
+              #fi;
             END
           end
 
