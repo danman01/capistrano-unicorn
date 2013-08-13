@@ -171,9 +171,7 @@ module CapistranoUnicorn
               sleep #{unicorn_restart_sleep_time}; # in order to wait for the (old) pidfile to show up
 
               if #{old_unicorn_is_running?}; then
-                # from github: The first worker forked notices there is still an old master and sends it a QUIT signal.
-                # maybe send QUIT before or after the first new worker has forked. How to do that here?
-                # Umm...isn't this done in the unicorn.rb before_fork block? https://github.com/blog/517-unicorn
+                # TODO verify child is up and running before sending QUIT
                 #{unicorn_send_signal('QUIT', get_old_unicorn_pid)};
               fi;
             ENDRUN
