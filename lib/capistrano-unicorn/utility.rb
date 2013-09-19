@@ -122,6 +122,7 @@ module CapistranoUnicorn
         fi;
 
         echo "Starting Unicorn...";
+        echo "debug: rack env: #{unicorn_rack_env}, rails env #{rails_env}, unicorn env: #{unicorn_env}"
         cd #{app_path} && #{try_unicorn_user} RAILS_ENV=#{rails_env} BUNDLE_GEMFILE=#{bundle_gemfile} #{unicorn_bundle} exec #{unicorn_bin} -c $UNICORN_CONFIG_PATH -E #{unicorn_rack_env} -D #{unicorn_options};
       %
     end
