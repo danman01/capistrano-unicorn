@@ -123,8 +123,10 @@ module CapistranoUnicorn
 
         echo "Starting Unicorn...";
         echo "debug: rack env: #{unicorn_rack_env}, rails env #{rails_env}, unicorn env: #{unicorn_env}"
-        cd #{app_path} && #{try_unicorn_user} RAILS_ENV=#{rails_env} BUNDLE_GEMFILE=#{bundle_gemfile} #{unicorn_bundle} exec #{unicorn_bin} -c $UNICORN_CONFIG_PATH -E #{unicorn_rack_env} -D #{unicorn_options};
+        cd #{app_path} && #{try_unicorn_user} RAILS_ENV=#{rails_env} BUNDLE_GEMFILE=#{bundle_gemfile} #{unicorn_bundle} exec #{unicorn_bin} -c $UNICORN_CONFIG_PATH -E #{rails_env} -D #{unicorn_options};
       %
+      # changing -E to rails_env from unicorn_rack_env
+      
     end
 
     def duplicate_unicorn
@@ -133,6 +135,7 @@ module CapistranoUnicorn
           echo "Duplicating Unicorn...";
           #{unicorn_send_signal('USR2')};
         else
+          echo "Starting Unicorn in duplicate unicorn method..."
           #{start_unicorn}
         fi;
       END
